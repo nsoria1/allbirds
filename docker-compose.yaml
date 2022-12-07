@@ -1,0 +1,27 @@
+version: '3.5'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: allbirds
+      POSTGRES_PASSWORD: allbirds
+      POSTGRES_DB: data
+    ports:
+      - "5432:5432"
+    restart: always
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "data", "-U", "allbirds" ]
+      interval : 5s
+      timeout : 5s
+      retries : 5
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: app/latest
+    depends_on:
+      postgres:
+        condition: service_healthy
