@@ -11,6 +11,8 @@ services:
     ports:
       - "5432:5432"
     restart: always
+    volumes: 
+      - ./infra/init.sh:/docker-entrypoint-initdb.d/init.sh
     healthcheck:
       test: [ "CMD", "pg_isready", "-q", "-d", "data", "-U", "allbirds" ]
       interval : 5s
