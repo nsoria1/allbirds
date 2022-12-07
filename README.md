@@ -95,5 +95,14 @@ It could be something like the following approach:
 It also can be done with python by adding an N amount of rows to the sql query to materialize the results.
 
 How (if at all) would you change this schema to better support queries of this kind?
+
 If the schema is used by the application, I would not change the schema. Instead, I'll model the data as required in the warehouse.
-I would do a wide table by joining all in one to avoid join computation. In the pipeline, I would be able to create an aggregated accumulator table for the n counts required.
+I would do a wide table by joining all in one to avoid join computation. 
+In the pipeline, I would be able to create an aggregated accumulator table for the n counts required if I have a table such as below:
+
+order_id, email, product_type, row_num, date
+1, nicosoria18@gmail.com, 'Runners, 1, date
+2, nicosoria18@gmail.com, 'Runners', 1, date
+3, nicosoria18@gmail.com, 'Loungers', 2, date
+
+While the 'Loungers' record will be the last written record for that email.
